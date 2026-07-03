@@ -129,7 +129,7 @@ kubectl get secret kube-prometheus-grafana -n monitoring \
 #   "no match for platform in manifest: not found"
 
 docker buildx build --platform linux/amd64 \
-  -t trainwithshubham/ai-bankapp-eks:latest \
+  -t shettymalathi113/ai-bankapp-eks:e3372d5 \
   --push .
 ```
 
