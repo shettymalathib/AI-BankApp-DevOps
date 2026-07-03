@@ -25,6 +25,25 @@ jobs:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: Test@123
+          MYSQL_DATABASE: bankappdb
+          MYSQL_USER: root
+          MYSQL_PASSWORD: Test@123
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -pTest@123"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+
+
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -41,9 +60,32 @@ jobs:
       - name: Build Application
         run: ./mvnw clean package -DskipTests -B
 
+      - name: Show Surefire Reports
+        if: always()
+        run: |
+          echo "===== Surefire Reports ====="
+          find target/surefire-reports -type f \
+            -exec echo "==== {} ====" \; \
+            -exec cat {} \;
+
+      - name: Upload Surefire Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports
+          path: target/surefire-reports
+
       - name: Run Tests
-        run: ./mvnw test -B
         continue-on-error: true
+        - name: Run Tests
+        env:
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_PORT: 3306
+          MYSQL_DATABASE: bankappdb
+          MYSQL_USER: root
+          MYSQL_PASSWORD: Test@123
+        run: |
+          ./mvnw test -X
 
       - name: Set Image Tag
         id: vars
