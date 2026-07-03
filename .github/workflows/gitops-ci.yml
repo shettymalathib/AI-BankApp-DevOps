@@ -31,18 +31,13 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: Test@123
           MYSQL_DATABASE: bankappdb
-          MYSQL_USER: root
-          MYSQL_PASSWORD: Test@123
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping -h 127.0.0.1 -pTest@123"
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -pTest@123"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=10
-
-
-
 
     steps:
       - name: Checkout Repository
@@ -57,8 +52,14 @@ jobs:
           java-version: "21"
           cache: maven
 
-      - name: Build Application
-        run: ./mvnw clean package -DskipTests -B
+      - name: Run Tests
+        env:
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_PORT: 3306
+          MYSQL_DATABASE: bankappdb
+          MYSQL_USER: root
+          MYSQL_PASSWORD: Test@123
+        run: ./mvnw clean verify -B
 
       - name: Show Surefire Reports
         if: always()
@@ -75,18 +76,6 @@ jobs:
           name: surefire-reports
           path: target/surefire-reports
 
-      - name: Run Tests
-        continue-on-error: true
-        - name: Run Tests
-        env:
-          MYSQL_HOST: 127.0.0.1
-          MYSQL_PORT: 3306
-          MYSQL_DATABASE: bankappdb
-          MYSQL_USER: root
-          MYSQL_PASSWORD: Test@123
-        run: |
-          ./mvnw test -X
-
       - name: Set Image Tag
         id: vars
         run: echo "SHA=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
@@ -97,10 +86,10 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Setup Docker Buildx
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and Push Image
+      - name: Build and Push Docker Image
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -115,7 +104,7 @@ jobs:
         run: |
           sed -i "s|image: ${{ env.DOCKERHUB_REPO }}:.*|image: ${{ env.DOCKERHUB_REPO }}:${{ steps.vars.outputs.SHA }}|" k8s/bankapp-deployment.yml
 
-          echo "===== Updated deployment ====="
+          echo "Updated deployment:"
           grep image k8s/bankapp-deployment.yml
 
       - name: Commit Updated Manifest
@@ -131,5 +120,4 @@ jobs:
           fi
 
           git commit -m "ci: update image to ${{ steps.vars.outputs.SHA }} [skip ci]"
-
           git push origin HEAD:master
