@@ -8,9 +8,9 @@ metadata:
 spec:
   project: bankapp-team
   source:
-    repoURL: https://github.com/malathi-shetty/90DaysOfDevOps_TrainWithShubham.git
+    repoURL: https://github.com/shettymalathib/AI-BankApp-DevOps.git
     targetRevision: master
-    path: 2026/day-86/AI-BankApp-DevOps/k8s
+    path: k8s
   destination:
     server: https://kubernetes.default.svc
     namespace: bankapp
