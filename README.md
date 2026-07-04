@@ -15,9 +15,20 @@ A modern banking application with an integrated AI chatbot, deployed on AWS EKS 
 
 ---
 
+<img width="2557" height="1318" alt="image" src="https://github.com/user-attachments/assets/9300cee5-bc35-4f3b-a093-2147e8c8d627" />
+
 ![Dashboard](screenshots/dashboard.png)
 
-![AI Chatbot](screenshots/ai-chatbot.png)
+<img width="2547" height="1377" alt="image" src="https://github.com/user-attachments/assets/3dc6f957-5541-4070-9e03-0582131beb72" />
+
+
+<img width="1387" height="287" alt="image" src="https://github.com/user-attachments/assets/ea4b7adb-d8e4-4531-9f3d-2f3ba002af3e" />
+
+<img width="2267" height="677" alt="image" src="https://github.com/user-attachments/assets/13dcf343-5da7-4981-9d2e-89bac4be2bc5" />
+
+
+<img width="1920" height="2313" alt="image" src="https://github.com/user-attachments/assets/cf57fbd3-be63-4a96-a26f-5e835f9aa7aa" />
+
 
 </div>
 
