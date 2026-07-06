@@ -152,7 +152,7 @@ Code Push → GitHub Actions → Build & Push to DockerHub → Update k8s manife
 
 ## Tech Stack
 
-**Backend:** Java 21, Spring Boot 3.4.1, Spring Security, Thymeleaf, Actuator
+**Backend:** Java 25, Spring Boot 3.4.1, Spring Security, Thymeleaf, Actuator
 
 **Frontend:** Bootstrap 5, glassmorphism dark/light UI, CSS custom properties
 
